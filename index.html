@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="tree.js"></script>
+<script type="text/javascript" src="queue.js"></script>
+
+<script type="text/javascript">
+//extends Node
+function PostCodeNode(pcode, suburb, state, dc, dc_type, lati, longi) {
+    this.pcode = pcode;
+	this.suburb = suburb;
+	this.state = state;
+	this.dc = dc;
+	this.dc_type = dc_type;
+	this.lati = lati;
+	this.longi = longi;
+    this.children = [];
+}
+
+var pCodeLib = new Tree(0);
+ 
+pCodeLib._root.children.push(new Node(2));
+pCodeLib._root.children[0].parent = pCodeLib;
+
+pCodeLib._root.children[0].children.push(new Node(0));
+pCodeLib._root.children[0].children[0].parent = pCodeLib._root.children[0];
+
+pCodeLib._root.children[0].children[0].children.push(new Node(0));
+pCodeLib._root.children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0];
+
+pCodeLib._root.children[0].children[0].children[0].children.push(new PostCodeNode(
+	'0200',
+	'AUSTRALIAN NATIONAL UNIVERSITY',
+	'ACT',
+	'AUSTRALIAN NATIONAL UNI LPO',
+	'Post Office Boxes',
+	-35.277272,
+	149.117136
+));
+pCodeLib._root.children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0];
+
+pCodeLib._root.children[0].children.push(new Node(2));
+pCodeLib._root.children[0].children[1].parent = pCodeLib._root.children[0];
+
+pCodeLib._root.children[0].children[1].children.push(new Node(1));
+pCodeLib._root.children[0].children[1].children[0].parent = pCodeLib._root.children[0].children[1];
+
+pCodeLib._root.children[0].children[1].children[0].children.push(new PostCodeNode(
+	'0221',
+	'BARTON',
+	'ACT',
+	'NULL',
+	'LVR',
+	-35.201372,
+	149.095065
+));
+pCodeLib._root.children[0].children[1].children[0].children[0].parent = pCodeLib._root.children[0].children[1].children[0];
+
+pCodeLib.traverseDF(function(node) {
+    document.write(node.data + ' ')
+});
+
+document.write("<br>");
+
+pCodeLib.traverseBF(function(node) {
+    document.write(node.data + ' ')
+});
+
+</script>
+</head>
+
+</http>
