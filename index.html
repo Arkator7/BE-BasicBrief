@@ -2,8 +2,19 @@
 <html>
 <head>
 
+<p id="output">
+
 <script type="text/javascript" src="tree.js"></script>
 <script type="text/javascript" src="queue.js"></script>
+<script type="text/javascript" src="read_csv.js"></script>
+
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+
+</head>
+
+<body>
+
+<div id="viz"></div>
 
 <script type="text/javascript">
 //extends Node
@@ -18,18 +29,43 @@ function PostCodeNode(pcode, suburb, state, dc, dc_type, lati, longi) {
     this.children = [];
 }
 
-var pCodeLib = new Tree(0);
+	var websersrc = "http://127.0.0.1:8887/materials/Australian_Post_Codes_Lat_Lon.csv";
+
+	var lib = []
+
+	d3.csv(websersrc, function(data) {
+		data.forEach(function(row) {
+			lib.push(row)
+		});
+	});
+
+
+/*
+var pCodeLib = new Tree('postcode');
  
-pCodeLib._root.children.push(new Node(2));
+ 
+pCodeLib._root.children.push(new Node(0));
 pCodeLib._root.children[0].parent = pCodeLib;
 
-pCodeLib._root.children[0].children.push(new Node(0));
+//Tree.prototype.add = function(data, toData, traversal) {
+pCodeLib.add (2, 0, pCodeLib.traverseDF);
+
+pCodeLib.add (4, 0, pCodeLib.traverseDF);
+
+document.write(pCodeLib._root.children[0].data + '<br>');
+document.write(pCodeLib._root.children[0].children[0].data + '<br>');
+document.write(pCodeLib._root.children[0].children[1].data + '<br>');
+
+pCodeLib._root.children[0].children.push(new Node(2));
 pCodeLib._root.children[0].children[0].parent = pCodeLib._root.children[0];
 
 pCodeLib._root.children[0].children[0].children.push(new Node(0));
 pCodeLib._root.children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0];
 
-pCodeLib._root.children[0].children[0].children[0].children.push(new PostCodeNode(
+pCodeLib._root.children[0].children[0].children[0].children.push(new Node(0));
+pCodeLib._root.children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0];
+
+pCodeLib._root.children[0].children[0].children[0].children[0].children.push(new PostCodeNode(
 	'0200',
 	'AUSTRALIAN NATIONAL UNIVERSITY',
 	'ACT',
@@ -38,15 +74,17 @@ pCodeLib._root.children[0].children[0].children[0].children.push(new PostCodeNod
 	-35.277272,
 	149.117136
 ));
-pCodeLib._root.children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0];
+pCodeLib._root.children[0].children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0].children[0];
+*/
 
-pCodeLib._root.children[0].children.push(new Node(2));
-pCodeLib._root.children[0].children[1].parent = pCodeLib._root.children[0];
+/*
+pCodeLib._root.children[0].children[0].children.push(new Node(2));
+pCodeLib._root.children[0].children[0].children[1].parent = pCodeLib._root.children[0].children[0];
 
-pCodeLib._root.children[0].children[1].children.push(new Node(1));
-pCodeLib._root.children[0].children[1].children[0].parent = pCodeLib._root.children[0].children[1];
+pCodeLib._root.children[0].children[0].children[1].children.push(new Node(1));
+pCodeLib._root.children[0].children[0].children[1].children[0].parent = pCodeLib._root.children[0].children[0].children[1].children[0];
 
-pCodeLib._root.children[0].children[1].children[0].children.push(new PostCodeNode(
+pCodeLib._root.children[0].children[0].children[1].children[0].children.push(new PostCodeNode(
 	'0221',
 	'BARTON',
 	'ACT',
@@ -55,7 +93,7 @@ pCodeLib._root.children[0].children[1].children[0].children.push(new PostCodeNod
 	-35.201372,
 	149.095065
 ));
-pCodeLib._root.children[0].children[1].children[0].children[0].parent = pCodeLib._root.children[0].children[1].children[0];
+pCodeLib._root.children[0].children[0].children[1].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[1].children[0];
 
 pCodeLib.traverseDF(function(node) {
     document.write(node.data + ' ')
@@ -66,8 +104,9 @@ document.write("<br>");
 pCodeLib.traverseBF(function(node) {
     document.write(node.data + ' ')
 });
-
+*/
 </script>
-</head>
+
+</body>
 
 </http>
