@@ -4,6 +4,17 @@ function Node(data) {
     this.children = [];
 }
  
+function PostCodeNode(pcode, suburb, state, dc, dc_type, lati, longi) {
+	this.pcode = pcode;
+	this.suburb = suburb;
+	this.state = state;
+	this.dc = dc;
+	this.dc_type = dc_type;
+	this.lati = lati;
+	this.longi = longi;
+	this.children = [];
+}
+ 
 function Tree(data) {
     var node = new Node(data);
     this._root = node;

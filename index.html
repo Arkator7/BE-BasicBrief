@@ -1,112 +1,93 @@
 <!DOCTYPE html>
 <html>
-<head>
+	<head>
 
-<p id="output">
+	<p id="output">
 
-<script type="text/javascript" src="tree.js"></script>
-<script type="text/javascript" src="queue.js"></script>
-<script type="text/javascript" src="read_csv.js"></script>
+		<meta charset="utf-8">
+		<title>Input text with D3</title> <!-- adapted from http://javadude.wordpress.com/2012/05/17/d3-js-with-dynamic-data/ -->
+		<script type="text/javascript" src="tree.js"></script>
+		<script type="text/javascript" src="queue.js"></script>
 
-<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+		<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+		<!--<script type="text/javascript" src="http://mbostock.github.com/d3/d3.csv.js"></script>-->
 
-</head>
+		<!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.2/d3.js"></script>-->
 
-<body>
+		<style>
+			body {font-family: monospace; line-height: 160%; font-size: 18px; }
+			ul {list-style: none; margin: 0; padding: 0;}
+			li {display: inline-block; min-width: 80px; padding: 10px; background-color: #eee; margin: 0;}
+			input {border: 1px dotted #ccc; background: white; font-family: monospace; padding: 10px 20px; font-size: 18px; margin: 20px 10px 20px 0; color: red;}
+			input:focus { background-color:yellow; outline: none;}
+		</style>
+		
+	</head>
 
-<div id="viz"></div>
+	<body>
 
-<script type="text/javascript">
-//extends Node
-function PostCodeNode(pcode, suburb, state, dc, dc_type, lati, longi) {
-    this.pcode = pcode;
-	this.suburb = suburb;
-	this.state = state;
-	this.dc = dc;
-	this.dc_type = dc_type;
-	this.lati = lati;
-	this.longi = longi;
-    this.children = [];
-}
+		<div id="viz"></div>
 
-	var websersrc = "http://127.0.0.1:8887/materials/Australian_Post_Codes_Lat_Lon.csv";
+		<form name="myform" onSubmit="return handleClick()">
+			<input type="text" id="myVal" placeholder="Postcode&hellip;">
+		</form>
 
-	var lib = []
+		<ul></ul>
 
-	d3.csv(websersrc, function(data) {
-		data.forEach(function(row) {
-			lib.push(row)
-		});
-	});
+		<script type="text/javascript">
+			var websersrc = "http://127.0.0.1:8887/materials/Australian_Post_Codes_Lat_Lon.csv";
 
+			var lib = [];
+			var resultLib = [];
+			
+			d3.csv(websersrc, function(postcode) {
+				//console.log("postcode", postcode)
+			
+				data = postcode.map(function(d) {
+					//each d is one line of the csv file represented as a json object
+					//console.log("d", d)
 
-/*
-var pCodeLib = new Tree('postcode');
- 
- 
-pCodeLib._root.children.push(new Node(0));
-pCodeLib._root.children[0].parent = pCodeLib;
+					pcode = d.postcode;
+					suburb = d.suburb;
+					state = d.state;
+					dc = d.dc;
+					dc_type = d.type;
+					lat = d.lat;
+					lon = d.lon;
+					
+					if (pcode == 2000) {
+						resultLib.push(d);
+					}
+					
+					return {"postcode": postcode,
+							"suburb": suburb,
+							"state": state,
+							"dc": dc,
+							"dc_type": dc_type,
+							"lat": lat,
+							"lon": lon} ;
+				})
+				//console.log("data", data)
+				lib = data;
 
-//Tree.prototype.add = function(data, toData, traversal) {
-pCodeLib.add (2, 0, pCodeLib.traverseDF);
+				//var results = getResults(lib, 2000);
+				
+				//console.log(results);
+				
+			});
 
-pCodeLib.add (4, 0, pCodeLib.traverseDF);
-
-document.write(pCodeLib._root.children[0].data + '<br>');
-document.write(pCodeLib._root.children[0].children[0].data + '<br>');
-document.write(pCodeLib._root.children[0].children[1].data + '<br>');
-
-pCodeLib._root.children[0].children.push(new Node(2));
-pCodeLib._root.children[0].children[0].parent = pCodeLib._root.children[0];
-
-pCodeLib._root.children[0].children[0].children.push(new Node(0));
-pCodeLib._root.children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0];
-
-pCodeLib._root.children[0].children[0].children[0].children.push(new Node(0));
-pCodeLib._root.children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0];
-
-pCodeLib._root.children[0].children[0].children[0].children[0].children.push(new PostCodeNode(
-	'0200',
-	'AUSTRALIAN NATIONAL UNIVERSITY',
-	'ACT',
-	'AUSTRALIAN NATIONAL UNI LPO',
-	'Post Office Boxes',
-	-35.277272,
-	149.117136
-));
-pCodeLib._root.children[0].children[0].children[0].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[0].children[0];
-*/
-
-/*
-pCodeLib._root.children[0].children[0].children.push(new Node(2));
-pCodeLib._root.children[0].children[0].children[1].parent = pCodeLib._root.children[0].children[0];
-
-pCodeLib._root.children[0].children[0].children[1].children.push(new Node(1));
-pCodeLib._root.children[0].children[0].children[1].children[0].parent = pCodeLib._root.children[0].children[0].children[1].children[0];
-
-pCodeLib._root.children[0].children[0].children[1].children[0].children.push(new PostCodeNode(
-	'0221',
-	'BARTON',
-	'ACT',
-	'NULL',
-	'LVR',
-	-35.201372,
-	149.095065
-));
-pCodeLib._root.children[0].children[0].children[1].children[0].children[0].parent = pCodeLib._root.children[0].children[0].children[1].children[0];
-
-pCodeLib.traverseDF(function(node) {
-    document.write(node.data + ' ')
-});
-
-document.write("<br>");
-
-pCodeLib.traverseBF(function(node) {
-    document.write(node.data + ' ')
-});
-*/
-</script>
-
-</body>
-
+			function handleClick(event){
+				console.log(document.getElementById("myVal").value)
+				return false;
+			}
+			
+			function draw(val){
+                d3.select("body").select("ul").append("li");
+                dataset.push(val);
+                var p = d3.select("body").selectAll("li")
+                .data(val)
+                .text(val)
+            }
+		</script>
+	</body>
 </http>
