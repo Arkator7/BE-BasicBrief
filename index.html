@@ -17,8 +17,6 @@
 	</head>
 
 	<body>
-		<div id="viz"></div>
-
 		<p><b>Enter Postcode (and press Enter):</b></p>
 		<form name="myform" onSubmit="return handleClick()">
 			<input type="text" id="myVal" placeholder="Postcode&hellip;">
@@ -29,19 +27,9 @@
 						
 			//Records input
             function handleClick(event){
-                //console.log(document.getElementById("myVal").value)
-                draw(document.getElementById("myVal").value)
+                getPCList(document.getElementById("myVal").value);
                 return false;
             }
- 
-			//Draw resulting table 
-            function draw(val){
-				var x = getPCList(val);
-
-				//console.log("x", x);
-            }
-
-
 		</script>
 	</body>
 </http>

@@ -19,7 +19,3 @@ Additional Notes:
 		- Although searching a tree tends to be faster, trees can be time consuming to set up.
 	- Hash tables can be fast to search and insert
 		- Storage can take up space
-		
-- Outstanding Issues
-	- I'm still unable to establish a server to evade the CORS error, therefore the file source path is still set as static.
-
