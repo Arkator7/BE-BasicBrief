@@ -1,0 +1,45 @@
+/* Font */
+body {
+	font-family: monospace;
+	line-height: 160%;
+	font-size: 18px;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* input box */
+li {
+	display: inline-block;
+	min-width: 80px;
+	padding: 10px;
+	background-color: #eee;
+	margin: 0;
+}
+			
+input {
+	border: 2px dotted #ccc;
+	background: white;
+	font-family: monospace;
+	padding: 10px 20px;
+	font-size: 18px;
+	margin: 20px 10px 20px 0;
+	color: black;
+}
+
+/* input box when selected for input background */
+input:focus {
+	background-color: white;
+	outline: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 2px solid black;
+}
