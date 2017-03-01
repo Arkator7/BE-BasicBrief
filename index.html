@@ -14,7 +14,8 @@
 		
 		<!-- D3 js -->
 		<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
-
+		<script type="text/javascript" src="read_csv.js"></script>
+		
 		<style>
 			<!--font-->
 			body {font-family: monospace; line-height: 160%; font-size: 18px; }
@@ -49,90 +50,12 @@
  
 			//Draw resulting table 
             function draw(val){
-				var x = getPC(val);
+				var x = getPCList(val);
 
 				//console.log("x", x);
             }
 
-			//Using D3 to read csv file and extract data
-			function getPC (pc) {
-				resultLib = [];
-				d3.csv(websersrc, function(postcode) {
-					//console.log("postcode", postcode)
-			
-					data = postcode.map(function(d) {
-						//each d is one line of the csv file represented as a json object
-						//console.log("d", d)
 
-						pcode = d.postcode;
-						suburb = d.suburb;
-						state = d.state;
-						dc = d.dc;
-						dc_type = d.type;
-						lat = d.lat;
-						lon = d.lon;
-					
-						if (pcode == pc) {
-							resultLib.push(d);
-						}
-					
-						return {"postcode": postcode,
-								"suburb": suburb,
-								"state": state,
-								"dc": dc,
-								"dc_type": dc_type,
-								"lat": lat,
-								"lon": lon} ;
-					})
-					//console.log("data", data)
-
-					//Draw table
-					d3.json('materials/return.json', function (error,data) {
-						function tabulate(data, columns) {
-							d3.select('body').select('table').remove();
-						
-							var table = d3.select('body').append('table');
-							var thead = table.append('thead');
-							var tbody = table.append('tbody');
-
-							// append the header row
-							thead.append('tr')
-							  .selectAll('th')
-							  .data(columns).enter()
-							  .append('th')
-								.text(function (column) { return column; });
-
-							// create a row for each object in the data
-							var rows = tbody.selectAll('tr')
-							  .data(data)
-							  .enter()
-							  .append('tr');
-
-							// create a cell in each row for each column
-							var cells = rows.selectAll('td')
-										.data(function (row) {
-									return columns.map(function (column) {
-									return {column: column, value: row[column]};
-								});
-							})
-								.enter()
-								.append('td')
-								.text(function (d) { return d.value; });
-
-							return table;
-						}
-
-						// render the table(s)
-						tabulate(resultLib, ['postcode',
-											'suburb',
-											'state',
-											'dc',
-											'dc_type',
-											'lat',
-											'lon']);
-					});
-				});
-			};
 		</script>
 	</body>
 </http>

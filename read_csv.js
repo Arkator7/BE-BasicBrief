@@ -1,81 +1,72 @@
-function handleFiles(files) {
-	// Check for the various File API support.
-	if (window.FileReader) {
-		// FileReader are supported.
-		getAsText(files[0]);
-	} else {
-		alert('FileReader are not supported in this browser.');
-	}
-}
+//Using D3 to read csv file and extract data
+function getPCList (pc) {
+	resultLib = [];
+	d3.csv(websersrc, function(postcode) {
+		//console.log("postcode", postcode)
 
-function getAsBinaryString(fileToRead) {
-	var reader = new FileReader();
-	// Handle errors load
-	reader.onload = loadHandler;
-	reader.onerror = errorHandler;
+		data = postcode.map(function(d) {
+			//each d is one line of the csv file represented as a json object
+			//console.log("d", d)
 
-	reader.readAsBinaryString(fileToRead);
-}
+			pcode = d.postcode;
+			suburb = d.suburb;
+			state = d.state;
+			dc = d.dc;
+			dc_type = d.type;
+			lat = d.lat;
+			lon = d.lon;
+					
+			if (pcode == pc) {
+				resultLib.push(d);
+			}
+					
+			return {"postcode": postcode,
+					"suburb": suburb,
+					"state": state,
+					"dc": dc,
+					"dc_type": dc_type,
+					"lat": lat,
+					"lon": lon} ;
+		})
+		//console.log("data", data)
 
-function getAsText(fileToRead) {
-	var reader = new FileReader();
-	// Handle errors load
-	reader.onload = loadHandler;
-	reader.onerror = errorHandler;
-	// Read file into memory as UTF-8      
-	reader.readAsText(fileToRead);
-}
+		//Draw table
+		d3.json('materials/return.json', function (error,data) {
+			function tabulate(data, columns) {
+				d3.select('body').select('table').remove();
+			
+				var table = d3.select('body').append('table');
+				var thead = table.append('thead');
+				var tbody = table.append('tbody');
 
-function getAsDataURL(fileToRead) {
-	var reader = new FileReader();
-	// Handle errors load
-	reader.onload = loadHandler;
-	reader.onerror = errorHandler;
+				// append the header row
+				thead.append('tr')
+					.selectAll('th')
+					.data(columns).enter()
+				    .append('th')
+					.text(function (column) { return column; });
 
-	reader.readAsDataURL(fileToRead);
-}
+				// create a row for each object in the data
+				var rows = tbody.selectAll('tr')
+								.data(data)
+								.enter()
+								.append('tr');
 
-/*function getAsArrayBuffer(fileToRead) {
-	var reader = new FileReader();
-	// Handle errors load
-	reader.onload = loadHandler;
-	reader.onerror = errorHandler;
-	// Read file into memory as UTF-8      
-	reader.readAsArrayBuffer(fileToRead);
-}*/
-
-function loadHandler(event) {
-    var csv = event.target.result;
-    processData(csv);
-}
-
-function processData(csv) {
-    var allTextLines = csv.split(/\r\n|\n/);
-    var lines = [];
-
-    while (allTextLines.length) {
-        lines.push(allTextLines.shift().split(','));
-    }
-	console.log(lines);
-	drawOutput(lines);
-}
-
-function errorHandler(evt) {
-    if(evt.target.error.name == "NotReadableError") {
-        alert("Can not read file !");
-    }
-}
-
-function drawOutput(lines){
-	//Clear previous data
-	document.getElementById("output").innerHTML = "";
-	var table = document.createElement("table");
-	for (var i = 0; i < lines.length; i++) {
-		var row = table.insertRow(-1);
-		for (var j = 0; j < lines[i].length; j++) {
-			var firstNameCell = row.insertCell(-1);
-			firstNameCell.appendChild(document.createTextNode(lines[i][j]));
+				// create a cell in each row for each column
+				var cells = rows.selectAll('td')
+								.data(function (row) {
+						return columns.map(function (column) {
+						return {column: column, value: row[column]};
+					});
+				})
+					.enter()
+					.append('td')
+					.text(function (d) { return d.value; });
+				return table;
 		}
-	}
-	document.getElementById("output").appendChild(table);
-}
+
+			// render the table(s)
+			tabulate(resultLib, ['postcode','suburb','state','dc','dc_type','lat','lon']);
+		});
+	});
+};
